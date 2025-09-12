@@ -144,7 +144,7 @@ class DataIngestorParquet(DataIngestor):
         
         try:
             # Read Parquet file(s)
-            df = self.spark.read.options(**csv_options).parquet(file_path_or_link)
+            df = self.spark.read.options(**options).parquet(file_path_or_link)
             
         except Exception as e:
             logger.error(f"✗ Failed to load Parquet data from {file_path_or_link}: {str(e)}")

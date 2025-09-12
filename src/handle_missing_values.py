@@ -82,7 +82,7 @@ class DropMissingValuesStrategy(MissingValueHandlingStrategy):
         # n_dropped = initial_count - final_count
         
         ############### PYSPARK CODES ###########################
-        final_count = df_cleaned.count()
+        final_count = df_cleaned.count() # no len() anymore it is count
         n_dropped = initial_count - final_count
 
         logger.info(f"✓ Dropped {n_dropped} rows with missing values")
@@ -180,7 +180,7 @@ class GenderImputer:
         
         ############### PYSPARK CODES ###########################
         # Create a UDF (User Defined Functions) for gender prediction
-        predict_gender_udf = F.udf(self._predict_gender, StringType())
+        predict_gender_udf = F.udf(self._predict_gender, StringType()) # In pandas you loop through the rows. Nut for 5 million dataset it is not appropriate. Thats why use this udf thing
         missing_gender_df= df.filter(
                     F.col('Gender').isNull() | (F.col('Gender') == '')
                     ).select('Firstname', 'Lastname')
