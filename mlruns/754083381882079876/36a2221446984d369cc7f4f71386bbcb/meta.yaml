@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/machinelearningzuu/Dropbox/Zuu Crew/Courses/Building Production-Ready
+  Machine Learning Systems/Live Classes/Week 07/mlruns/754083381882079876/36a2221446984d369cc7f4f71386bbcb/artifacts
+end_time: 1757174223841
+entry_point_name: ''
+experiment_id: '754083381882079876'
+lifecycle_stage: active
+run_id: 36a2221446984d369cc7f4f71386bbcb
+run_name: data pipeline pyspark | 2025-09-06 21:27:03
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1757174223820
+status: 3
+tags: []
+user_id: machinelearningzuu

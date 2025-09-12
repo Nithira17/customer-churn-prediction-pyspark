@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/machinelearningzuu/Dropbox/Zuu Crew/Courses/Building Production-Ready
+  Machine Learning Systems/Live Classes/Week 07/mlruns/754083381882079876/0daec640cba549729bd3bc3d50374248/artifacts
+end_time: 1757174269156
+entry_point_name: ''
+experiment_id: '754083381882079876'
+lifecycle_stage: active
+run_id: 0daec640cba549729bd3bc3d50374248
+run_name: training pipeline | 2025-09-06 21:27:44
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1757174264505
+status: 3
+tags: []
+user_id: machinelearningzuu
