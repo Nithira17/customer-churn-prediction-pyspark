@@ -28,8 +28,8 @@ install:
 	@echo Creating virtual environment...
 	$(PYTHON) -m venv .venv
 	@echo Activating virtual environment and installing dependencies...
-	$(VENV) && pip install --upgrade pip
-	$(VENV) && pip install -r requirements.txt
+	$(VENV) && $(PYTHON) -m pip install --upgrade pip
+	$(VENV) && $(PYTHON) -m pip install -r requirements.txt
 	@echo Installation completed successfully!
 	@echo To activate the virtual environment, run: .venv\Scripts\activate.bat
 
