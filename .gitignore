@@ -1,0 +1,46 @@
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.env
+.env
+*.egg
+*.egg-info/
+dist/
+build/
+*.log
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# VS Code
+.vscode/
+.history/
+
+# Spark
+.metastore_db/
+spark-warehouse/
+
+# Data files
+*.csv
+*.tsv
+*.parquet
+*.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# PySpark temp files
+*.crc
+
+# Others
+*.bak
