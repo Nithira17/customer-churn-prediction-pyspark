@@ -122,7 +122,7 @@ class CustomBinningStrategy(FeatureBinningStrategy):
         """
         bin_column = f'{column}Bins'
 
-        case_expr = F.when(F.col(column) == 850, "Excellent")
+        case_expr = F.when(F.col(column) == 850, "Excellent") # looks like 'if' expression
 
 
         for bin_label, bin_range in self.bin_definitions.items():
