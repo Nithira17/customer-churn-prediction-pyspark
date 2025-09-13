@@ -247,13 +247,13 @@ class OutlierDetector:
 
                 clean_df = clean_df.withColumn(
                                             col,
-                                            F.when(F.col(col) < lb, lb)
+                                            F.when(F.col(col) < lb, lb) # This means when the column value is less than lower bound we set that vlue to lower bound value. Not removing the value
                                             .when(F.col(col) > ub, ub)
-                                            .otherwise(F.col(col))
+                                            .otherwise(F.col(col)) # If not nothingchanges to the column value
                                             )
             
         else:
             raise ValueError(f"Unknown outlier handling method: {method}")
         
         logger.info(f"{'='*60}\n")
-        return cleaned_df
+        return clean_df
