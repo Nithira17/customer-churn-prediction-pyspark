@@ -91,7 +91,7 @@ class NominalEncodingStrategy(FeatureEncodingStrategy):
                                     )
             
             indexer_model = indexer.fit(df_encoded)
-            self.indexer[column] = indexer_model
+            self.indexers[column] = indexer_model
 
             labels = indexer_model.labels
             encoder_dict = {label:idx for idx, label in enumerate(labels)}
@@ -142,7 +142,7 @@ class OrdinalEncodingStrategy(FeatureEncodingStrategy):
 
         for column, mapping in self.ordinal_mappings.items():
             mapping_expr = F.when(F.col(column).isNull(), None)
-            for value, code in mapping.item():
+            for value, code in mapping.items():
                 mapping_expr = mapping_expr.when(F.col(column) == value, code)
 
             df_encoded = df_encoded.withColumn(column, mapping_expr)

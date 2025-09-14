@@ -92,7 +92,7 @@ class IQROutlierDetection(OutlierDetectionStrategy):
             # bounds[col] = (lower_bound, upper_bound)
 
             ############### PYSPARK CODES ###########################
-            quantiles = df.approxQuantile(self.relevant_column, [0.25, 0.75], 0.01)
+            quantiles = df.approxQuantile(col, [0.25, 0.75], 0.01)
             Q1, Q3 = quantiles[0], quantiles[1]
             IQR = Q3 - Q1
 

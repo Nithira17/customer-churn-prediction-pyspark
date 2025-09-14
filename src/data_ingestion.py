@@ -80,6 +80,7 @@ class DataIngestorCSV(DataIngestor):
             logger.info(f"{'='*60}\n")
             raise
 
+        return df
 
 class DataIngestorExcel(DataIngestor):
     """Excel data ingestion implementation."""
@@ -121,6 +122,8 @@ class DataIngestorExcel(DataIngestor):
             logger.info(f"{'='*60}\n")
             raise
 
+        return df
+
 
 class DataIngestorParquet(DataIngestor):
     """PySpark Parquet data ingestion implementation (new for PySpark)."""
@@ -151,6 +154,7 @@ class DataIngestorParquet(DataIngestor):
             logger.info(f"{'='*60}\n")
             raise
 
+        return df
 
 class DataIngestorFactory:
     """Factory class to create appropriate data ingestor based on file type."""

@@ -11,6 +11,7 @@ from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql import functions as F
 from pyspark.ml.feature import MinMaxScaler, StandardScaler, VectorAssembler
 from pyspark.ml import Pipeline
+from pyspark.ml.functions import vector_to_array
 from spark_session import get_or_create_spark_session
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -77,19 +78,39 @@ class MinMaxScalingStrategy(FeatureScalingStrategy):
 
         for col in columns_to_scale:
             vector_col = f"{col}_vec"
-            assembler = VectorAssembler(inputCols=[col], cutputCol=vector_col)
+            df_scaled = df_scaled.withColumn(col, F.col(col).cast("double"))
+            assembler = VectorAssembler(inputCols=[col], outputCol=vector_col)
 
             scaled_vector_col = f"{col}_scaled_vec"
-            scaler = MinMaxScaler(inputCols=vector_col, cutputCol=scaled_vector_col)
+            scaler = MinMaxScaler(inputCol=vector_col, outputCol=scaled_vector_col)
+
+            # pipeline = Pipeline(stages=[assembler, scaler])
+            # pipeline_model = pipeline.fit(df_scaled)
+
+            # get_value_udf = F.udf(lambda x: float(x[0] if x is not None else None), "double")
+            # df_scaled = df_scaled.withColumn(
+            #                                 col,
+            #                                 get_value_udf(F.col(scaled_vector_col))
+            #                                 )
 
             pipeline = Pipeline(stages=[assembler, scaler])
             pipeline_model = pipeline.fit(df_scaled)
 
-            get_value_udf = F.udf(lambda x: float(x[0] if x is not None else None), "double")
+            # Create *_vec and *_scaled_vec
+            df_scaled = pipeline_model.transform(df_scaled)
+
+            # Replace original column with scalar from the 1-D vector
             df_scaled = df_scaled.withColumn(
-                                            col,
-                                            get_value_udf(F.col(scaled_vector_col))
-                                            )
+                col,
+                vector_to_array(F.col(scaled_vector_col)).getItem(0)
+            )
+
+            # Drop temp columns
+            df_scaled = df_scaled.drop(vector_col, scaled_vector_col)
+
+            # (Optional) keep the fitted scaler per column
+            self.scaler_models[col] = pipeline_model.stages[-1]
+
 
         return df_scaled
 
@@ -131,18 +152,33 @@ class StandardScalingStrategy(FeatureScalingStrategy):
 
         for col in columns_to_scale:
             vector_col = f"{col}_vec"
-            assembler = VectorAssembler(inputCols=[col], cutputCol=vector_col)
+            df_scaled = df_scaled.withColumn(col, F.col(col).cast("double"))
+
+            assembler = VectorAssembler(inputCols=[col], outputCol=vector_col)
 
             scaled_vector_col = f"{col}_scaled_vec"
-            scaler = StandardScaler(inputCols=vector_col, cutputCol=scaled_vector_col)
+            scaler = StandardScaler(inputCol=vector_col, outputCol=scaled_vector_col)
+
+            # pipeline = Pipeline(stages=[assembler, scaler])
+            # pipeline_model = pipeline.fit(df_scaled)
+
+            # get_value_udf = F.udf(lambda x: float(x[0] if x is not None else None), "double")
+            # df_scaled = df_scaled.withColumn(
+            #                                 col,
+            #                                 get_value_udf(F.col(scaled_vector_col))
+            #                                 )
 
             pipeline = Pipeline(stages=[assembler, scaler])
             pipeline_model = pipeline.fit(df_scaled)
 
-            get_value_udf = F.udf(lambda x: float(x[0] if x is not None else None), "double")
+            df_scaled = pipeline_model.transform(df_scaled)
+
             df_scaled = df_scaled.withColumn(
-                                            col,
-                                            get_value_udf(F.col(scaled_vector_col))
-                                            )
+                col,
+                vector_to_array(F.col(scaled_vector_col)).getItem(0)
+            )
+
+            df_scaled = df_scaled.drop(vector_col, scaled_vector_col)
+            self.scaler_models[col] = pipeline_model.stages[-1]
 
         return df_scaled
